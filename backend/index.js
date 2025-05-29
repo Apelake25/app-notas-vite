@@ -2,7 +2,15 @@ const express = require('express');
 const admin = require('firebase-admin');
 const cors = require('cors');
 
-const serviceAccount = require('./firebase-key.json'); // Coloca aquí tu archivo de clave privada
+let serviceAccount;
+
+if (process.env.FIREBASE_KEY) {
+  // Producción (Render)
+  serviceAccount = JSON.parse(process.env.FIREBASE_KEY);
+} else {
+  // Desarrollo local
+  serviceAccount = require('./firebase-key.json');
+}
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
