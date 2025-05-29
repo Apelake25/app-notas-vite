@@ -8,12 +8,14 @@ import {
   doc,
   updateDoc
 } from 'firebase/firestore';
+import './index.css';
 
 export default function App() {
   const [notes, setNotes] = useState([]);
-  const [note, setNote] = useState("");
+  const [note, setNote] = useState('');
   const notesCollection = collection(db, 'notas');
 
+  // Cargar notas de Firestore
   useEffect(() => {
     const fetchNotes = async () => {
       const data = await getDocs(notesCollection);
@@ -23,70 +25,77 @@ export default function App() {
     fetchNotes();
   }, []);
 
+  // Añadir nota
   const handleAdd = async () => {
-    if (note.trim()) {
-      const newNote = {
-        text: note,
-        favorite: false,
-        archived: false
-      };
-      const docRef = await addDoc(notesCollection, newNote);
-      setNotes([...notes, { ...newNote, id: docRef.id }]);
-      setNote("");
-    }
+    if (!note.trim()) return;
+    const newNote = { text: note, favorite: false, archived: false };
+    const docRef = await addDoc(notesCollection, newNote);
+    setNotes([...notes, { ...newNote, id: docRef.id }]);
+    setNote('');
   };
 
-  const handleDelete = async (id) => {
+  // Borrar nota
+  const handleDelete = async id => {
     await deleteDoc(doc(db, 'notas', id));
     setNotes(notes.filter(n => n.id !== id));
   };
 
-  const toggleFavorite = async (id) => {
-    const note = notes.find(n => n.id === id);
-    const updated = { ...note, favorite: !note.favorite };
+  // Alternar favorito
+  const toggleFavorite = async id => {
+    const target = notes.find(n => n.id === id);
+    const updated = { ...target, favorite: !target.favorite };
     await updateDoc(doc(db, 'notas', id), { favorite: updated.favorite });
     setNotes(notes.map(n => n.id === id ? updated : n));
   };
 
-  const toggleArchive = async (id) => {
-    const note = notes.find(n => n.id === id);
-    const updated = { ...note, archived: !note.archived };
+  // Alternar archivado
+  const toggleArchive = async id => {
+    const target = notes.find(n => n.id === id);
+    const updated = { ...target, archived: !target.archived };
     await updateDoc(doc(db, 'notas', id), { archived: updated.archived });
     setNotes(notes.map(n => n.id === id ? updated : n));
   };
 
   return (
-    <div className="p-6 max-w-xl mx-auto">
-      <h1 className="text-3xl font-bold mb-4">App de Notas</h1>
-      <div className="flex gap-2 mb-4">
-        <input
-          className="border p-2 flex-grow"
+    <div className="app-container">
+      <header className="app-header">
+        <h1>App de Notas</h1>
+      </header>
+
+      <section className="input-section">
+        <textarea
+          className="note-textarea"
           placeholder="Escribe una nota..."
           value={note}
           onChange={e => setNote(e.target.value)}
         />
-        <button className="bg-blue-500 text-white px-4 py-2 rounded" onClick={handleAdd}>
+        <button className="btn-add" onClick={handleAdd}>
           Añadir
         </button>
-      </div>
-      <div className="space-y-2">
-        {notes.map(n => (
-          <div key={n.id} className="border p-4 rounded flex justify-between items-center">
-            <div>
-              <p className={n.archived ? 'line-through text-gray-400' : ''}>{n.text}</p>
-              <div className="text-sm text-gray-500">
-                {n.favorite && <span className="mr-2">★ Favorito</span>}
-                {n.archived && <span>📦 Archivado</span>}
+      </section>
+
+      <section className="list-section">
+        <ul>
+          {notes.map(n => (
+            <li key={n.id} className={n.archived ? 'archived' : ''}>
+              <p className={n.archived ? 'line-through text-gray-400' : ''}>
+                {n.text}
+              </p>
+              <div className="actions">
+                <button onClick={() => toggleFavorite(n.id)} title="Favorito">
+                  {n.favorite ? '★' : '☆'}
+                </button>
+                <button onClick={() => toggleArchive(n.id)} title="Archivar">
+                  📦
+                </button>
+                <button onClick={() => handleDelete(n.id)} className="btn-borrar" title="Eliminar">
+                  ✕
+                </button>
               </div>
-            </div>
-            <div className="flex gap-2">
-              <button onClick={() => toggleFavorite(n.id)} className="text-yellow-600">{n.favorite ? '★' : '☆'}</button>
-              <button onClick={() => toggleArchive(n.id)} className="text-gray-600">📦</button>
-              <button onClick={() => handleDelete(n.id)} className="text-red-500">🗑️</button>
-            </div>
-          </div>
-        ))}
-      </div>
+            </li>
+          ))}
+        </ul>
+      </section>
     </div>
   );
 }
