@@ -5,10 +5,10 @@ const cors = require('cors');
 let serviceAccount;
 
 if (process.env.FIREBASE_KEY) {
-  // Producción (Render)
+  // Render: lee desde la variable de entorno
   serviceAccount = JSON.parse(process.env.FIREBASE_KEY);
 } else {
-  // Desarrollo local
+  // Local: usa el archivo firebase-key.json
   serviceAccount = require('./firebase-key.json');
 }
 
