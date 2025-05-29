@@ -82,13 +82,25 @@ export default function App() {
                 {n.text}
               </p>
               <div className="actions">
-                <button onClick={() => toggleFavorite(n.id)} title="Favorito">
+                <button
+                  onClick={() => toggleFavorite(n.id)}
+                  className="action-btn favorite"
+                  title="Favorito"
+                >
                   {n.favorite ? '★' : '☆'}
                 </button>
-                <button onClick={() => toggleArchive(n.id)} title="Archivar">
+                <button
+                  onClick={() => toggleArchive(n.id)}
+                  className="action-btn archive"
+                  title="Archivar"
+                >
                   📦
                 </button>
-                <button onClick={() => handleDelete(n.id)} className="btn-borrar" title="Eliminar">
+                <button
+                  onClick={() => handleDelete(n.id)}
+                  className="action-btn delete"
+                  title="Eliminar"
+                >
                   ✕
                 </button>
               </div>
