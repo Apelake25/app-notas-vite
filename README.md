@@ -1,35 +1,41 @@
 # 📝 App de Notas
 
-Aplicación web para crear, visualizar y gestionar notas de forma sencilla. Desarrollada con **React** + **Vite**, y conectada con **Firebase Firestore** para persistencia de datos en tiempo real.
+Aplicación web para crear, visualizar y gestionar notas de forma sencilla. Desarrollada con **React + Vite** en el frontend y **Node.js + Express** en el backend, conectada con **Firebase Firestore** para almacenar datos en la nube en tiempo real.
 
 ---
 
-## 🚀 Descripción General
+## 📌 Descripción General
 
-La App de Notas es una herramienta minimalista orientada a la productividad personal. Permite a los usuarios:
+Esta aplicación permite a los usuarios:
 
-- Crear y guardar notas rápidamente.
-- Consultar notas existentes desde cualquier dispositivo.
-- Persistir los datos mediante integración con Firebase.
+- Crear nuevas notas rápidamente.
+- Consultar sus notas desde cualquier dispositivo.
+- Guardar, editar y eliminar datos almacenados en Firebase Firestore.
 
-Este proyecto ha sido diseñado para ser ligero, rápido y fácil de desplegar en la nube (por ejemplo, en **Vercel**).
-
----
-
-## 🛠️ Tecnologías Utilizadas
-
-- **React**: Biblioteca para construir interfaces interactivas.
-- **Vite**: Bundler moderno y ultrarrápido para desarrollo con React.
-- **Firebase Firestore**: Base de datos NoSQL en tiempo real.
-- **JavaScript (ES6+)** y **HTML/CSS** para la lógica y el diseño.
+El frontend está desplegado en **Vercel** y el backend en **Render**.
 
 ---
 
-## 📦 Dependencias Principales
+## 🚀 Tecnologías Utilizadas
+
+- **React + Vite** – Para la interfaz de usuario.
+- **Firebase Firestore** – Base de datos en la nube (NoSQL).
+- **Node.js + Express** – Servidor backend que expone rutas REST.
+- **Render** – Hospedaje del backend (con conexión a Firebase).
+- **Vercel** – Hospedaje del frontend.
+
+---
+
+## 🧩 Estructura de la base de datos
+
+### 📂 Colección: `notas`
+
+Cada documento dentro de la colección representa una nota individual con la siguiente estructura:
 
 ```json
-"dependencies": {
-  "firebase": "^X.X.X",
-  "react": "^18.X.X",
-  "react-dom": "^18.X.X"
+{
+  "titulo": "Comprar leche",
+  "contenido": "Ir al supermercado",
+  "fecha": "2025-05-29T12:00:00Z",
+  "id_usuario": "uid123abc"
 }
